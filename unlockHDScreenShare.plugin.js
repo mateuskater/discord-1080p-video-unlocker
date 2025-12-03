@@ -1,24 +1,31 @@
 /**
  * @name unlockHDScreenShare
- * @version 0.0.2
+ * @version 0.0.3
  * @description unlock the ability to share your screen in 1080p
  * @author Ralkey#0516
  * @source https://github.com/RalkeyOfficial/discord-1080p-video-unlocker
- *   
  */
 
-
-module.exports = class unlockHDScreenShare{
+module.exports = class unlockHDScreenShare {
      
     constructor() {
-        this.userPremiumType = BdApi.findModuleByProps("getCurrentUser").getCurrentUser().premiumType;
+        const UserStore = BdApi.Webpack.getStore("UserStore");
+        this.userPremiumType = UserStore?.getCurrentUser()?.premiumType;
     }
      
     start() { 
-        BdApi.findModuleByProps("getCurrentUser").getCurrentUser().premiumType = 2;
+        const UserStore = BdApi.Webpack.getStore("UserStore");
+        const currentUser = UserStore?.getCurrentUser();
+        if (currentUser) {
+            currentUser.premiumType = 2;
+        }
     }
     
     stop() {
-        BdApi.findModuleByProps("getCurrentUser").getCurrentUser().premiumType = this.userPremiumType;
+        const UserStore = BdApi.Webpack.getStore("UserStore");
+        const currentUser = UserStore?.getCurrentUser();
+        if (currentUser) {
+            currentUser.premiumType = this.userPremiumType;
+        }
     }
 }
